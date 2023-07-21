@@ -1,0 +1,21 @@
+import java.io.IOException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class JobListingScraper {
+   public static void main(String[] args) {
+      try {
+         String url = "https://www.linkedin.com/jobs/";
+         Document document = Jsoup.connect(url).get();
+         Elements jobs = document.select("div[class=job-card]");
+
+         for (Element job : jobs) {
+            String jobTitle = job.getElementsByTag("h3").text();
+            String companyName = job.getElementsByTag("h4").text();
+            String jobLocation = job.getElementsByTag("span")
+               .select("span[class^=job-location]").first().text();
+            System.out.println("Title: " + jobTitle);
+            System.out.println("Company: " + companyName);
+            System.out
