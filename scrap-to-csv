@@ -1,0 +1,50 @@
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class JobScraper {
+
+	public static void main(String[] args) throws IOException, ParseException {
+
+		List<Job> jobs = new ArrayList<>();
+
+		// Connect to the web page
+		Document document = Jsoup.connect("http://www.example.com/jobs").get();
+
+		// Get the list of jobs on the web page
+		Elements jobElements = document.select("div.jobs-listing");
+
+		// Loop through each job
+		for (Element jobElement : jobElements) {
+
+			// Get the job detail elements
+			Elements jobDetailElements = jobElement.select("div.job-details");
+
+			// Create a new Job object
+			Job job = new Job();
+
+			// Set the job title
+			job.setTitle(jobElement.select("h2 a").text());
+
+			// Set the job location
+			job.setLocation(jobDetailElements.select("span.location").text());
+
+			// Set the job description
+			job.setDescription(jobDetailElements.select("p.description").text());
+
+			// Add the job to the list
+			jobs.add(job);
+		}
+
+		// Write the job list to the CSV file
+		CSVWriter.writeCSV(jobs);
+
+	}
+
+}
