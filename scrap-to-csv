@@ -48,3 +48,46 @@ public class JobScraper {
 	}
 
 }
+
+const puppeteer = require('puppeteer');
+const csvWriter = require('csv-writer'); 
+const fs = require('fs');
+
+(async function main(){
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto('https://www.example.com/jobs');
+    await page.waitFor({timeout: 10000});
+    const results = await page.evaluate(() => {
+        let jobs = [];
+        // select job listing elements
+        const listingElements = document.querySelectorAll('.job-listing');
+        // loop through each job listing element
+        listingElements.forEach(element => {
+            let title = element.querySelector('.job-title').innerText;
+            let company = element.querySelector('.company-name').innerText;
+            let link = element.querySelector('a').href;
+    
+            // add job details to array
+            jobs.push({
+                title,
+                company,
+                link
+            });
+        });
+        return jobs;       
+    });
+    // create a csv writer
+    const csvWriter = createCsvWriter({
+        path: 'jobs.csv',
+        header: [
+            {id: 'title', title: 'Job Title'},
+            {id: 'company', title: 'Company'},
+            {id: 'link', title: 'Link'},
+        ]
+    });
+    // write jobs to csv file
+    csvWriter.writeRecords(results);
+    // close the browser
+    await browser.close();
+})()
