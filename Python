@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
    
-URL = "http://www.values.com/inspirational-quotes"
+URL = "https://www.linkedin.com/jobs/"
 r = requests.get(URL)
    
 soup = BeautifulSoup(r.content, 'html5lib')
@@ -23,7 +23,7 @@ for row in table.findAll('div',
     quote['author'] = row.img['alt'].split(" #")[1]
     quotes.append(quote)
    
-filename = 'inspirational_quotes.csv'
+filename = 'jobs.csv'
 with open(filename, 'w', newline='') as f:
     w = csv.DictWriter(f,['theme','url','img','lines','author'])
     w.writeheader()
