@@ -1,0 +1,46 @@
+# Create a function that will make a request to a LinkedIn job page
+def get_listings(url):
+    # Get the webpage 
+    page_contents = requests.get(url) 
+    tree = html.fromstring(page_contents.content)
+
+    # Obtain HTML for the job postings 
+    job_listings = tree.xpath('//li[@class="result-card"]')
+
+    # Return a list of job listings
+    list_of_jobs = []
+    for job in job_listings: 
+        job_text = job.xpath('.//div[@class="result-card__contents"]//text()')
+        # Acquire job URLs
+        job_url = job.xpath('.//a[@class="result-card__full-card-link"]/@href')
+        
+        # Clean the individual job texts 
+        job_text_list = re.findall('[A-Za-z0-9]', job_text)
+        job_text_clean = ''.
+
+
+<--break-->
+
+import requests
+import urllib.request
+from bs4 import BeautifulSoup
+
+# Specify the url
+url = 'https://www.linkedin.com/jobs/search/?location=Worldwide&keywords=python'
+ 
+# Query the website and return the html to the variable 'page'
+page = urllib.request.urlopen(url)
+ 
+# Parse the html in the 'page' variable, and store it in Beautiful Soup format
+soup = BeautifulSoup(page, "lxml")
+ 
+# search for job postings
+jobs = soup.find_all("div", attrs={"class": "job-card__content-wrapper"})
+ 
+for job in jobs:
+    title = job.find("h3", {"class": "job-card__title"})
+    location = job.find("span", {"class": "job-card__location"})
+    if title and location:
+    	print("Title:", title.text.strip())
+    	print("Location:", location.text.strip())
+    	print()
