@@ -1,0 +1,27 @@
+public class Bot { 
+
+  String jobWebsite; 
+  String jobLocation; 
+  String jobType;
+  Map<String,List<String>> keywordCriteria; 
+  Map<String,String> applicationData; 
+  List<String> successfulApplications;
+
+  // Sets up the criteria for the job search
+  public void setCriteria(String jobWebsite, String jobLocation, String jobType, 
+                          Map<String,List<String>> keywordCriteria, 
+                          Map<String,String> applicationData) {
+    this.jobWebsite = jobWebsite; 
+    this.jobLocation = jobLocation; 
+    this.jobType = jobType; 
+    this.keywordCriteria = keywordCriteria; 
+    this.applicationData = applicationData; 
+  }
+
+  // Method to start the job search
+  public void startSearch() { 
+    // Crawl the specified job website for jobs matching user criteria
+    List<String> jobs = crawlJobs(); 
+    // Iterate over the jobs
+    for (String job : jobs) { 
+      // Run the keyword scanning algorithm
